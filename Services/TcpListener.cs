@@ -76,7 +76,7 @@ namespace LicenceWorkorder.Services
 
         }
 
-        public user HttpListener(string port)
+        public void HttpListener(string port)
         {
 
             HttpListener listener = new HttpListener();
@@ -87,31 +87,30 @@ namespace LicenceWorkorder.Services
             try
             {
                 listener.Start();
-                Log.Logger.Information("Listener Started!");
-                while (true)
-                {
-                    Log.Logger.Information("Client Connected!");
-                    var context = listener.GetContext();
-                    var request = context.Request;
-                    string content;
-                    using (var reader = new StreamReader(request.InputStream,
-                                                         request.ContentEncoding))
-                    {
-                        content = reader.ReadToEnd();
-                    }
-                    if (content != null)
-                    {
-                        user user = JsonSerializer.Deserialize<user>(content);
-                        return user;
-                    }
-                }
+                Log.Logger.Warning($"Listening on {url}");
             }
             catch (HttpListenerException hlex)
             {
                 Log.Logger.Warning(hlex.Message);
-                return null;
             }
-           
+            while (true)
+            {
+                var context = listener.GetContext();
+                var request = context.Request;
+                Log.Logger.Information("Client Connected!");
+                string content;
+                using (var reader = new StreamReader(request.InputStream,
+                                                     request.ContentEncoding))
+                {
+                    content = reader.ReadToEnd();
+                }
+                if (content != null && content != "")
+                {
+                    user user = JsonSerializer.Deserialize<user>(content);
+                    Log.Logger.Information(content);
+
+                }
+            }
         }
 
 

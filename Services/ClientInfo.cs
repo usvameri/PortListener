@@ -13,13 +13,15 @@ using System.Threading.Tasks;
 
 namespace LicenceWorkorder.Services
 {
-    public class ClientWorker
+    public class ClientInfo
     {
         public Client CheckClient()
         {
             var client = new Client();
+
             ManagementClass managementClass = new ManagementClass("win32_processor");
             ManagementObjectCollection managementBaseObjects = managementClass.GetInstances();
+            
             var macAddresses = new List<string>();
             foreach (ManagementObject mo in managementBaseObjects)
             {
@@ -52,9 +54,9 @@ namespace LicenceWorkorder.Services
             client.clientName = userName;
             client.macAddress = macAddresses;
             var json = JsonSerializer.Serialize(client);
-            var textforsave = client.cpuId + "|" + client.clientName + "|" + client.ipAddress;
+            var textforsave = client.cpuId + "|" + client.clientName + "|" + client.ipAddress; // remove this
             string securityKey = "tubbiyaSecurity";
-            var result = StringChipher.Encrypt(textforsave, securityKey);
+            var result = StringChipher.Encrypt(json, securityKey);
             Log.Logger.Information(result);
             Log.Logger.Information("-------------------------------");
             //Console.WriteLine("-------------------------------");

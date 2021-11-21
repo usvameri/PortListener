@@ -23,12 +23,10 @@ namespace LicenceWorkorder
             {
                 Log.Information("Service is started: {time}", DateTime.Now);
                 CreateHostBuilder(args).Build().Run();
-                return;
             }
             catch (Exception ex)
             {
                 Log.Fatal(ex,"Error");
-                return;
             }
             finally
             {

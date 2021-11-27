@@ -44,7 +44,7 @@ namespace LicenceWorkorder
                 //var client = new ClientWorker();
                 //var result = client.CheckClient();
                 TcpListener listener = new TcpListener();
-                listener.HttpListener("12999");
+                listener.HttpListener("12979");
                 //listener.ListenTcpPort(this,stoppingToken);
                 //TcpMessager.SendMessage();    
             //if (result != null)

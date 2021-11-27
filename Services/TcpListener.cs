@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
@@ -107,12 +108,52 @@ namespace LicenceWorkorder.Services
                 if (content != null && content != "")
                 {
                     user user = JsonSerializer.Deserialize<user>(content);
+
+                    //var httpClient = new HttpClient();
+                    //var uri = new Uri("https://localhost:5001/account/programlogin");
+                    //var json = JsonSerializer.Serialize(new { username = username, password = password });
+                    //var stringContent = new StringContent(json);
+                    //var result = httpClient.PostAsync(uri, stringContent).Result.Content.ReadAsStringAsync();
+                    //if (result != null)
+                    //{
+                    //    var softwareParts = JsonSerializer.Deserialize<List<ProductSoftwarePart>>(result.Result);
+                    //}
                     Log.Logger.Information(content);
+                    //var softwareParts = GetSoftwareParts(user.username, user.password, user.cpuId,user.clientName).Result;
+                    var softwareParts = GetSoftwareParts(user.username, user.password).Result;
+                    Log.Logger.Information((string)softwareParts);
+
 
                 }
             }
         }
 
+        //public async Task<object> GetSoftwareParts(string username, string password, string cpuId, string clientName)
+        public async Task<object> GetSoftwareParts(string username, string password)
+        {
+            var httpClient = new HttpClient();
+            var uri = new Uri("https://localhost:5001/account/programlogin");
+            var client = ClientInfo.CheckClient();
+            var json = JsonSerializer.Serialize(new { username = username, password = password, cpuId= client.cpuId, clientName = client.clientName });
+            var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpResponseMessage responseMessage = await httpClient.PostAsync(uri, stringContent);
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                var result = responseMessage.Content.ReadAsStringAsync().Result;
+                if(result != null || result != "")
+                {
+                    //var softwareParts = JsonSerializer.Deserialize<List<ProductSoftwarePart>>(result);
+                    var softwareParts = JsonSerializer.Deserialize<string>(result);
+                    //string content = "";
+                    //foreach (var item in softwareParts)
+                    //{
+                    //    content += item.name + "|";
+                    //}
+                    return softwareParts;
+                }
+            }
+            return null;
 
+        }
     }
 }

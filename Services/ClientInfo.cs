@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace LicenceWorkorder.Services
 {
-    public class ClientInfo
+    public static class ClientInfo
     {
-        public Client CheckClient()
+        public static Client CheckClient()
         {
             var client = new Client();
 
@@ -34,9 +34,6 @@ namespace LicenceWorkorder.Services
                         macAddresses.Add(Mac.ToString());
                     }
                 }
-                //var revision = managementObject.Properties["Revision"].Value.ToString();
-
-                //Console.WriteLine(revision);
             }
 
 
@@ -53,16 +50,16 @@ namespace LicenceWorkorder.Services
             string userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
             client.clientName = userName;
             client.macAddress = macAddresses;
-            var json = JsonSerializer.Serialize(client);
-            var textforsave = client.cpuId + "|" + client.clientName + "|" + client.ipAddress; // remove this
-            string securityKey = "tubbiyaSecurity";
-            var result = StringChipher.Encrypt(json, securityKey);
-            Log.Logger.Information(result);
-            Log.Logger.Information("-------------------------------");
+            //var json = JsonSerializer.Serialize(client);
+            //var textforsave = client.cpuId + "|" + client.clientName + "|" + client.ipAddress; // remove this
+            //string securityKey = "tubbiyaSecurity";
+            //var result = StringChipher.Encrypt(json, securityKey);
+            //Log.Logger.Information(result);
+            //Log.Logger.Information("-------------------------------");
             //Console.WriteLine("-------------------------------");
-            var decrypt = StringChipher.Decrypt(result, securityKey);
+            //var decrypt = StringChipher.Decrypt(result, securityKey);
             //Console.WriteLine(decrypt);
-            Log.Logger.Information(decrypt);
+            //Log.Logger.Information(decrypt);
 
 
             return client;

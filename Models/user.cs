@@ -10,6 +10,8 @@ namespace LicenceWorkorder.Models
     {
         public string username { get; set; }
         public string password{ get; set; }
+        public string cpuId{ get; set; }
+        public string clientName{ get; set; }
 
     }
 }
